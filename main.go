@@ -19,9 +19,9 @@ var (
 func createRandomNumber() int {
 	min, max := 1, 10
 	rand.Seed(time.Now().UnixNano())
-	secretNumber := rand.Intn(max-min) + min
+	randomNumber := rand.Intn(max-min) + min
 	// fmt.Println("The secret number is: ", secretNumber)
-	return secretNumber
+	return randomNumber
 }
 
 func getUserInput() int {
