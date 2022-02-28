@@ -10,9 +10,11 @@ import (
 	"time"
 )
 
-var secretNumber int
-var guess int
-var win bool
+var (
+	secretNumber int
+	guess        int
+	win          bool
+)
 
 func createRandomNumber() int {
 	min, max := 1, 10
@@ -23,10 +25,6 @@ func createRandomNumber() int {
 }
 
 func getUserInput() int {
-	guessMessage := "Guess a number between 1 and 10"
-
-	fmt.Println(guessMessage)
-
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	input = strings.TrimSuffix(input, "\n")
@@ -46,10 +44,10 @@ func compareGuess(guess, secretNumber int) bool {
 	win := false
 
 	if guess < secretNumber {
-		fmt.Println("Your guess is less than the secret number. Try again")
+		fmt.Printf("Your guess is %v than the secret number. \nTry again: ", "less")
 		win = false
 	} else if guess > secretNumber {
-		fmt.Println("Your guess is greater than the secret number. Try again")
+		fmt.Println("Your guess is greater than the secret number.\nTry again: ")
 		win = false
 	} else {
 		fmt.Println("Correct, you Legend!")
@@ -62,6 +60,8 @@ func main() {
 	attempts := 0
 
 	secretNumber = createRandomNumber()
+	guessMessage := "Guess a number between 1 and 10"
+	fmt.Println(guessMessage)
 	for {
 		attempts++
 		guess = getUserInput()
@@ -70,7 +70,7 @@ func main() {
 			break
 		}
 		if attempts == 3 && win == false {
-			fmt.Println("So Sorry you failed to guess the number, it was: ", secretNumber)
+			fmt.Printf("So Sorry you failed to guess the number, it was: %v.", secretNumber)
 			break
 		}
 	}
