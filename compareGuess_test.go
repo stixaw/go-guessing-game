@@ -5,27 +5,22 @@ import (
 )
 
 func TestCompareGuess(t *testing.T) {
-	input1 := 1
-	input2 := 5
-	expectedOutput := false
-
-	output := compareGuess(input1, input2)
-
-	if expectedOutput != output {
-		t.Errorf("Failed ! got %v want %v", output, expectedOutput)
-	} else {
-		t.Logf("Success !")
+	cases := []struct {
+		input1   int
+		input2   int
+		expected bool
+	}{
+		{1, 5, false},
+		{5, 5, true},
 	}
 
-	inputA := 5
+	for _, c := range cases {
+		output := compareGuess(c.input1, c.input2)
 
-	expectedOutput2 := true
-
-	output2 := compareGuess(inputA, input2)
-
-	if expectedOutput2 != output2 {
-		t.Errorf("Failed ! got %v want %v", output, expectedOutput)
-	} else {
-		t.Logf("Success !")
+		if c.expected != output {
+			t.Errorf("Failed ! got %v want %v", output, c.expected)
+		} else {
+			t.Logf("Success !")
+		}
 	}
 }
