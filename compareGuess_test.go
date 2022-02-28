@@ -11,6 +11,7 @@ func TestCompareGuess(t *testing.T) {
 		expected bool
 	}{
 		{1, 5, false},
+		{6, 5, false},
 		{5, 5, true},
 	}
 
