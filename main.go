@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -22,24 +23,25 @@ var (
 func createRandomNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(max-min) + min
-	fmt.Println("The secret number is: ", randomNumber)
+	// fmt.Println("The secret number is: ", randomNumber)
 	return randomNumber
 }
 
-func getUserInput(min, max int) int {
+func getAndValidateUserInput(min, max int) int {
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
-	input = strings.TrimSuffix(input, "\n")
-
-	// validates the input is a valid integer
-	guess, err := strconv.Atoi(input)
 	if err != nil {
-		invalidMessage := "Invalid input. Please enter an integer value"
-		fmt.Println(invalidMessage)
+		log.Println("An error occurred while reading input. Please try again", err)
 	}
 
-	//validate the number is between the min and max:
-	if guess < min || guess > max {
+	input = strings.TrimSuffix(input, "\n")
+
+	// validates the input is a valid integer and within the range
+	guess, err := strconv.Atoi(input)
+	if err != nil {
+		invalidMessage := "Invalid input. Please enter an integer value.\nTry Again: "
+		fmt.Println(invalidMessage)
+	} else if guess < min || guess > max {
 		fmt.Printf("\nYour guess must be between %v and %v.\nTry Again: ", min, max)
 	} else {
 		fmt.Println("\nYour Guess is: ", guess)
@@ -76,7 +78,7 @@ func main() {
 	secretNumber = createRandomNumber(min, max)
 	fmt.Printf("You have 3 chances to guess a number between %v and %v.\nMake your guess: ", min, max)
 	for {
-		guess = getUserInput(min, max)
+		guess = getAndValidateUserInput(min, max)
 		if guess >= min && guess <= max {
 			attempts++
 			win = compareGuess(guess, secretNumber)
