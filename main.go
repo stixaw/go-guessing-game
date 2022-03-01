@@ -58,11 +58,11 @@ func compareGuess(guess, secretNumber int) bool {
 			fmt.Printf("Your guess is greater than the secret number.")
 			win = false
 		} else {
-			fmt.Println("Correct, you Legend!")
+			fmt.Println("Correct, you Legend! You guessed right after", attempts, "attempts")
 			win = true
 		}
 		if attempts < 3 && win == false {
-			fmt.Printf("\nTry again: ")
+			fmt.Printf("You have %v more tries.\nTry again: ", 3-attempts)
 		}
 	}
 	return win
