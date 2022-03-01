@@ -44,13 +44,18 @@ func getUserInput() int {
 func compareGuess(guess, secretNumber int) bool {
 	win := false
 	if attempts <= 3 {
-		fmt.Println("Attempts: ", attempts)
 		if guess < secretNumber {
-			fmt.Printf("Your guess is %v than the secret number. \nTry again: ", "less")
+			fmt.Printf("Your guess is %v than the secret number.", "less")
 			win = false
+			if attempts < 3 {
+				fmt.Println("\nTry again: ")
+			}
 		} else if guess > secretNumber {
 			fmt.Println("Your guess is greater than the secret number.\nTry again: ")
 			win = false
+			if attempts < 3 {
+				fmt.Println("\nTry again: ")
+			}
 		} else {
 			fmt.Println("Correct, you Legend!")
 			win = true
@@ -63,7 +68,7 @@ func main() {
 	attempts = 0
 
 	secretNumber = createRandomNumber()
-	guessMessage := "Guess a number between 1 and 10"
+	guessMessage := "You have 3 chances to guess a number between 1 and 10.\nMake your guess: "
 	fmt.Println(guessMessage)
 	for {
 		attempts++
@@ -73,7 +78,7 @@ func main() {
 			break
 		}
 		if attempts == 3 && win == false {
-			fmt.Printf("So Sorry you failed to guess the number, it was: %v.", secretNumber)
+			fmt.Printf("\nSo Sorry you failed to guess the number, it was: %v.", secretNumber)
 			break
 		}
 	}
