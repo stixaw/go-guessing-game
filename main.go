@@ -23,11 +23,11 @@ var (
 func createRandomNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(max-min) + min
-	// fmt.Println("The secret number is: ", randomNumber)
+	fmt.Println("The secret number is: ", randomNumber)
 	return randomNumber
 }
 
-func getAndValidateUserInput(min, max int) int {
+func getUserInput() string {
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -35,19 +35,28 @@ func getAndValidateUserInput(min, max int) int {
 	}
 
 	input = strings.TrimSuffix(input, "\n")
+	return input
+}
 
-	// validates the input is a valid integer and within the range
+func convertInputToInt(input string) int {
 	guess, err := strconv.Atoi(input)
 	if err != nil {
 		invalidMessage := "Invalid input. Please enter an integer value.\nTry Again: "
 		fmt.Println(invalidMessage)
-	} else if guess < min || guess > max {
+	}
+	return guess
+}
+
+func validateUserGuess(guess, min, max int) bool {
+	// if the input is a valid guess we return the guess
+	isValid := false
+	if guess < min || guess > max {
 		fmt.Printf("\nYour guess must be between %v and %v.\nTry Again: ", min, max)
 	} else {
+		isValid = true
 		fmt.Println("\nYour Guess is: ", guess)
 	}
-
-	return guess
+	return isValid
 }
 
 func compareGuess(guess, secretNumber int) bool {
@@ -76,10 +85,12 @@ func main() {
 	max := 10
 
 	secretNumber = createRandomNumber(min, max)
-	fmt.Printf("You have 3 chances to guess a number between %v and %v.\nMake your guess: ", min, max)
+	fmt.Printf("Your goal is to guess a random number between %v and %v.\nMake your guess: ", min, max)
 	for {
-		guess = getAndValidateUserInput(min, max)
-		if guess >= min && guess <= max {
+		input := getUserInput()
+		guess = convertInputToInt(input)
+		isValid := validateUserGuess(guess, min, max)
+		if isValid {
 			attempts++
 			win = compareGuess(guess, secretNumber)
 			if win == true {
