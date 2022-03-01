@@ -11,21 +11,22 @@ import (
 )
 
 var (
+	min          int
+	max          int
 	secretNumber int
 	guess        int
 	attempts     int
 	win          bool
 )
 
-func createRandomNumber() int {
-	min, max := 1, 10
+func createRandomNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(max-min) + min
 	fmt.Println("The secret number is: ", randomNumber)
 	return randomNumber
 }
 
-func getUserInput() int {
+func getUserInput(min, max int) int {
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	input = strings.TrimSuffix(input, "\n")
@@ -37,7 +38,13 @@ func getUserInput() int {
 		fmt.Println(invalidMessage)
 	}
 
-	fmt.Println("Your Guess is: ", guess)
+	//validate the number is between the min and max:
+	if guess < min || guess > max {
+		fmt.Printf("\nYour guess must be between %v and %v.\nTry Again: ", min, max)
+	} else {
+		fmt.Println("\nYour Guess is: ", guess)
+	}
+
 	return guess
 }
 
@@ -45,20 +52,17 @@ func compareGuess(guess, secretNumber int) bool {
 	win := false
 	if attempts <= 3 {
 		if guess < secretNumber {
-			fmt.Printf("Your guess is %v than the secret number.", "less")
+			fmt.Printf("Your guess is less than the secret number.")
 			win = false
-			if attempts < 3 {
-				fmt.Println("\nTry again: ")
-			}
 		} else if guess > secretNumber {
-			fmt.Println("Your guess is greater than the secret number.\nTry again: ")
+			fmt.Printf("Your guess is greater than the secret number.")
 			win = false
-			if attempts < 3 {
-				fmt.Println("\nTry again: ")
-			}
 		} else {
 			fmt.Println("Correct, you Legend!")
 			win = true
+		}
+		if attempts < 3 && win == false {
+			fmt.Printf("\nTry again: ")
 		}
 	}
 	return win
@@ -66,20 +70,23 @@ func compareGuess(guess, secretNumber int) bool {
 
 func main() {
 	attempts = 0
+	min := 1
+	max := 10
 
-	secretNumber = createRandomNumber()
-	guessMessage := "You have 3 chances to guess a number between 1 and 10.\nMake your guess: "
-	fmt.Println(guessMessage)
+	secretNumber = createRandomNumber(min, max)
+	fmt.Printf("You have 3 chances to guess a number between %v and %v.\nMake your guess: ", min, max)
 	for {
-		attempts++
-		guess = getUserInput()
-		win = compareGuess(guess, secretNumber)
-		if win == true {
-			break
-		}
-		if attempts == 3 && win == false {
-			fmt.Printf("\nSo Sorry you failed to guess the number, it was: %v.", secretNumber)
-			break
+		guess = getUserInput(min, max)
+		if guess >= min && guess <= max {
+			attempts++
+			win = compareGuess(guess, secretNumber)
+			if win == true {
+				break
+			}
+			if attempts == 3 && win == false {
+				fmt.Printf("\nSo Sorry you failed to guess the number, it was: %v.", secretNumber)
+				break
+			}
 		}
 	}
 }
