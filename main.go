@@ -21,7 +21,7 @@ func createRandomNumber() int {
 	min, max := 1, 10
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(max-min) + min
-	// fmt.Println("The secret number is: ", secretNumber)
+	fmt.Println("The secret number is: ", randomNumber)
 	return randomNumber
 }
 
@@ -43,7 +43,8 @@ func getUserInput() int {
 
 func compareGuess(guess, secretNumber int) bool {
 	win := false
-	if attempts != 3 {
+	if attempts <= 3 {
+		fmt.Println("Attempts: ", attempts)
 		if guess < secretNumber {
 			fmt.Printf("Your guess is %v than the secret number. \nTry again: ", "less")
 			win = false
