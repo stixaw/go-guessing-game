@@ -17,13 +17,14 @@ var (
 	secretNumber int
 	guess        int
 	attempts     int
+	maxAttempts  int
 	win          bool
 )
 
 func createRandomNumber(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	randomNumber := rand.Intn(max-min) + min
-	fmt.Println("The secret number is: ", randomNumber)
+	// fmt.Println("The secret number is: ", randomNumber)
 	return randomNumber
 }
 
@@ -48,7 +49,7 @@ func convertInputToInt(input string) int {
 }
 
 func validateUserGuess(guess, min, max int) bool {
-	// if the input is a valid guess we return the guess
+	// if the input is a valid guess we return the true
 	isValid := false
 	if guess < min || guess > max {
 		fmt.Printf("\nYour guess must be between %v and %v.\nTry Again: ", min, max)
@@ -61,31 +62,34 @@ func validateUserGuess(guess, min, max int) bool {
 
 func compareGuess(guess, secretNumber int) bool {
 	win := false
-	if attempts <= 3 {
+	if attempts <= maxAttempts {
 		if guess < secretNumber {
-			fmt.Printf("Your guess is less than the secret number.")
+			fmt.Printf("Your guess is less than the number, let the force guide you.")
 			win = false
 		} else if guess > secretNumber {
-			fmt.Printf("Your guess is greater than the secret number.")
+			fmt.Printf("Your guess is greater than the number, let the force guide you.")
 			win = false
 		} else {
-			fmt.Println("Correct, you Legend! You guessed right after", attempts, "attempts")
+			fmt.Println("Correct, Padawan!\nYou are getting stronger in the force.\nYou guessed right after", attempts, "attempts")
 			win = true
 		}
-		if attempts < 3 && win == false {
-			fmt.Printf("You have %v more tries.\nTry again: ", 3-attempts)
+		if attempts < maxAttempts && win == false {
+			fmt.Printf("You have %v more tries.\nTry again: ", maxAttempts-attempts)
 		}
 	}
 	return win
 }
 
 func main() {
+	maxAttempts = 5
 	attempts = 0
 	min := 1
-	max := 10
+	max := 20
+
+	fmt.Println("Padwan, its time to test your use the force.\nPrepare to be tested!")
 
 	secretNumber = createRandomNumber(min, max)
-	fmt.Printf("Your goal is to guess a random number between %v and %v.\nMake your guess: ", min, max)
+	fmt.Printf("To see how strong you are in the force you must guess what number I am thinking of between %v and %v.\nMake your guess: ", min, max)
 	for {
 		input := getUserInput()
 		guess = convertInputToInt(input)
@@ -96,8 +100,8 @@ func main() {
 			if win == true {
 				break
 			}
-			if attempts == 3 && win == false {
-				fmt.Printf("\nSo Sorry you failed to guess the number, it was: %v.", secretNumber)
+			if attempts == maxAttempts && win == false {
+				fmt.Printf("\nYou are not strong in the force Padawan, you must continue to practice your force lessons for the number was: %v.", secretNumber)
 				break
 			}
 		}
