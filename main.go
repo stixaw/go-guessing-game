@@ -70,7 +70,7 @@ func compareGuess(guess, secretNumber int) bool {
 			fmt.Printf("Your guess is greater than the number, let the force guide you.")
 			win = false
 		} else {
-			fmt.Println("Correct, Padawan!\nYou are getting stronger in the force.\nYou guessed right after", attempts, "attempts")
+			fmt.Println("Correct, Padawan!\nYou are strong in the force.\nYou guessed right after", attempts, "attempts")
 			win = true
 		}
 		if attempts < maxAttempts && win == false {
@@ -81,11 +81,14 @@ func compareGuess(guess, secretNumber int) bool {
 }
 
 func main() {
+
+	//to do make these submittable by commandline
 	maxAttempts = 5
 	attempts = 0
 	min := 1
 	max := 20
 
+	// the program
 	fmt.Println("Padwan, its time to test your use the force.\nPrepare to be tested!")
 
 	secretNumber = createRandomNumber(min, max)
@@ -101,7 +104,7 @@ func main() {
 				break
 			}
 			if attempts == maxAttempts && win == false {
-				fmt.Printf("\nYou are not strong in the force Padawan, you must continue to practice your force lessons for the number was: %v.", secretNumber)
+				fmt.Printf("\nYou are not very strong in the force Padawan for the number was: %v.", secretNumber)
 				break
 			}
 		}
